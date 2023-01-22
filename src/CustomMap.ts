@@ -1,23 +1,46 @@
 import type * as Leaflet from "leaflet";
-import { User } from "./User";
 
 const { L } = window as unknown as { L: typeof Leaflet };
 
+export interface Mappable {
+  location: {
+    lat: number;
+    lng: number;
+  };
+}
 export class CustomMap {
-  private leafletMap: Leaflet.Map;
+  private map: Leaflet.Map;
+  popup = L.popup();
+  standalonePopup = L.popup();
 
   constructor(divId: string) {
-    this.leafletMap = L.map(divId).setView([16, 74], 1);
+    this.map = L.map(divId).setView([16, 74], 1);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(this.leafletMap);
+    }).addTo(this.map);
+
+    // click on map starts here
+    this.map.on("click", (e) => {
+      this.popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(this.map);
+    });
+    // click on map ends here
+
+    this.standalonePopup
+      .setLatLng([51.513, -0.09])
+      .setContent("I am a standalone popup.")
+      .openOn(this.map);
   }
 
-  addUserMarker(user: User) {
-    L.marker({ lat: user.location.lat, lng: user.location.lng }).addTo(
-      this.leafletMap
-    );
+  addUserMarker(mappable: Mappable) {
+    const marker = L.marker({
+      lat: mappable.location.lat,
+      lng: mappable.location.lng,
+    }).addTo(this.map);
+    marker.bindPopup("Hi There");
   }
 }

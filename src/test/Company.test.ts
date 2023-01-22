@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Company } from "./Company";
+import { Company } from "../Company";
 
 describe("Company.ts", () => {
   it("creates a new company instance with name, location, catch phrase when initialized", () => {
