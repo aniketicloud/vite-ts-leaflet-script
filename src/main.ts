@@ -1,4 +1,7 @@
 import { CustomMap } from "./CustomMap";
 import "./style.css";
+import { User } from "./User";
 
-new CustomMap("app");
+const user = new User();
+const customMap = new CustomMap("app");
+customMap.addUserMarker(user);
