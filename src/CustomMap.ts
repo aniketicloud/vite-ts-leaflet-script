@@ -7,6 +7,7 @@ export interface Mappable {
     lat: number;
     lng: number;
   };
+  markerContent(): string;
 }
 export class CustomMap {
   private map: Leaflet.Map;
@@ -36,11 +37,11 @@ export class CustomMap {
       .openOn(this.map);
   }
 
-  addUserMarker(mappable: Mappable) {
+  addMarker(mappable: Mappable) {
     const marker = L.marker({
       lat: mappable.location.lat,
       lng: mappable.location.lng,
     }).addTo(this.map);
-    marker.bindPopup("Hi There");
+    marker.bindPopup(mappable.markerContent());
   }
 }
